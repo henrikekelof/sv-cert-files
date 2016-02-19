@@ -24,7 +24,7 @@ Must be installed on developer machine:
 
 Make sure metadata values for site JS and CSS are pointed at GitHub files or upload assets to the site and point metadata to your files.
 
-During development, files will be at ...
+During development, files will be at http://henrikekelof.github.io/sv-cert-files/
 
 When work is done, upload them to SiteVision file archive and point metadata to files in file archive.
 

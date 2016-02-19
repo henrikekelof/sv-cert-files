@@ -1,0 +1,46 @@
+@-ms-viewport {
+  width: device-width; }
+
+.visuallyhidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0; }
+
+.group:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+html {
+  font: -apple-system-body;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+  margin: 0;
+  padding: 0; }
+
+*, *:before, *:after {
+  box-sizing: inherit; }
+
+img {
+  border: 0;
+  display: block;
+  max-width: 100%;
+  height: auto; }
+
+svg:not(:root) {
+  overflow: hidden; }
+
+.tmpl {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0; }
+  .tmpl__main {
+    position: relative;
+    z-index: 1; }

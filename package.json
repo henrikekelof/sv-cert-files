@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/henrikekelof/sv-cert-files"
   },
-  "homepage": "https://github.com/henrikekelof/sv-cert-files",
+  "homepage": "http://henrikekelof.github.io/sv-cert-files/",
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",

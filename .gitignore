@@ -1,5 +1,7 @@
 
-dist/*
+dist/ours.js
+dist/theirs.js
+
 _build/*
 .ftppass
 .sass-cache/*
