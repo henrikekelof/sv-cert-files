@@ -1,0 +1,15 @@
+//=== MEDIA QUERIES ===//
+
+
+@mixin media( $mq ) {
+    @media #{$mq} {
+        @content;
+    }
+}
+
+@mixin media-min-width( $w ) {
+    @media (min-width: $w) {
+        @content;
+    }
+}
+

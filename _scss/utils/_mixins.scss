@@ -1,0 +1,26 @@
+
+@mixin listReset {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+@mixin imageReplace( $w, $h ) {
+    display: block;
+    width: $w;
+    height: 0;
+    padding-top: $h;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: $w auto;
+    overflow: hidden;
+}
+
+@mixin hoverFocus() {
+    &:hover,
+    &:focus {
+        @content;
+    }
+}
+
+

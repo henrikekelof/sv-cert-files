@@ -1,0 +1,48 @@
+@function rem( $px, $isFontSize: false ) {
+    $rem: ( $px / 16px ) * 1rem;
+    @if ($isFontSize) {
+        @return unquote($px + "; font-size: " + $rem);
+    }
+    @return $rem;
+}
+
+@function em( $px, $base: 16px ) {
+    $em: ( $px / $base ) * 1em;
+    @return $em;
+}
+
+@function lineHeight( $px, $base: 16px ) {
+    $number: ($px / $base);
+    @if type-of($number) == 'number' and not unitless($number) {
+        @return $number / ($number * 0 + 1);
+    }
+    @return $number;
+}
+
+@function cols($n, $inPixels: false) {
+    // Column and gutter size!
+    // 12 cols = 1280px
+    $col: 81px;
+    $gutter: 28px;
+    $size: ($col * $n) + ($gutter * ($n - 1));
+    @if $inPixels {
+        @return $size;
+    }
+    @return rem($size);
+}
+
+// Adds site padding (2 x 20px = 40px) to column width
+@function paddedCols( $n ) {
+    $col: 81px;
+    $gutter: 28px;
+    $size: ( $col * $n ) + ( $gutter * ( $n - 1 ) ) + $site-padding * 2;
+    @if $inPixels {
+        @return $size;
+    }
+    @return rem($size);
+}
+
+@function data-uri( $file ) {
+
+    @return url( inline-image( $ASSETS + $file ) );
+}
