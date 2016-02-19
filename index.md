@@ -9,10 +9,10 @@ JS and CSS for SiteVision Certification
 
 ## Readable
 
-- http://henrikekelof.github.io/sv-cert-files/dist/site.js
-- http://henrikekelof.github.io/sv-cert-files/dist/site.css
+- [site.js](http://henrikekelof.github.io/sv-cert-files/dist/site.js)
+- [site.css](http://henrikekelof.github.io/sv-cert-files/dist/site.css)
 
 ## Minified
 
-- http://henrikekelof.github.io/sv-cert-files/dist/site.min.js
-- http://henrikekelof.github.io/sv-cert-files/dist/site.min.css
+- [site.min.js](http://henrikekelof.github.io/sv-cert-files/dist/site.min.js)
+- [site.min.css](http://henrikekelof.github.io/sv-cert-files/dist/site.min.css)
