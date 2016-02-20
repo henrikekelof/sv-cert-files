@@ -1,0 +1,86 @@
+
+.tmpl__header {
+    max-width: $site-width-rem;
+    margin: 0 auto;
+
+    .homeLink {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .sv-jcrmenu-portlet {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        background-color: rgba($white, .9);
+        border-bottom: 1px solid $border-grey;
+
+        ul {
+            padding-left: 50px;
+        }
+    }
+
+    .searchForm {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+
+.logo {
+    background: {
+        image: data-uri("logo.svg");
+        position: 50% -18px;
+        size: 900px auto;
+        repeat: no-repeat;
+    }
+    height: 100px;
+
+    img {
+        display: none; //inline-block;
+        //position: relative;
+        //top: -1vw;
+        //width: 800px;
+        //max-width: none;
+    }
+}
+
+.homeLink {
+
+    &__link {
+        display: block;
+        width: 38px;
+        height: 30px;
+        background: {
+            image: data-uri("ekelof.svg");
+            position: 50% 50%;
+            repeat: no-repeat;
+            size: 100% auto;
+        };
+    }
+}
+
+.searchForm {
+
+    &__input {
+        //display: none;
+        display: block;
+    }
+
+    &__label {
+        display: block;
+        background-color: $black;
+        padding: 4px 40px 4px 4px;
+
+        &:hover, &.focused {
+            .searchForm__input {
+                //display: block;
+            }
+        }
+    }
+
+
+
+}
