@@ -7,9 +7,9 @@ $SITE_ROOT: "/";
 
 //=== SIZES ===//
 
-$site-padding: 20px;
-$site-width-px: 1280px;
-$site-width-rem: rem(1280px);
+$site-padding: 15px;
+$site-width-px: 990px;
+$site-width-rem: rem( $site-width-px );
 
 
 //=== FONT FAMILIES ===//

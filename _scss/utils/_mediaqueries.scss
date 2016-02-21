@@ -1,5 +1,26 @@
 //=== MEDIA QUERIES ===//
 
+$bp-small:        28em; // 448
+$bp-medium:        41.875em; // 670
+$bp-large:        61.875em; // 990
+
+@function minWidthString( $min ) {
+    @return #{"(min-width: " + $min + ")"}
+}
+
+@function maxWidthString( $max ) {
+    $max: $max - 0.0625em; // subtract 1px
+    @return #{"(max-width: " + $max + ")"}
+}
+
+$small-and-up: minWidthString( $bp-small );
+$medium-and-up: minWidthString( $bp-medium );
+$large-and-up: minWidthString( $bp-large );
+
+$small-only: maxWidthString( $bp-small );
+$up-to-medium: maxWidthString( $bp-medium );
+$up-to-large: maxWidthString( $bp-large );
+
 
 @mixin media( $mq ) {
     @media #{$mq} {
