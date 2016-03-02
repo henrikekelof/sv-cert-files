@@ -13,12 +13,6 @@ html {
     box-sizing: inherit;
 }
 
-body {
-    // &.preventScroll {
-    //     overflow: hidden;
-    // }
-}
-
 img {
     border: 0;
     display: block;
@@ -31,6 +25,39 @@ svg:not(:root) {
     overflow: hidden;
 }
 
+h1.heading {
+    text-align: center;
+    @include media( $up-to-medium ) {
+        font-size: rem( 30px, true );
+    }
+}
 
+p.sv-font-ingress {
+    @include media( $up-to-medium ) {
+        font-size: rem( 18px, true );
+    }
+}
 
+a.sv-font-meta {
+    &:before {
+        content: "av ";
+        font-style: italic;
+        font-weight: normal;
+        color: $dark-grey;
+    }
+    &:link, &:hover, &:focus, &:active {
+        font-weight: bold;
+    }
+}
+
+.tmpl__articleTop {
+    padding: 0 $site-padding;
+    max-width: $site-width-rem;
+}
+
+.tmpl__articleContent .sv-text-portlet {
+    margin: 0 auto;
+    padding: 0 $site-padding;
+    max-width: 40em;
+}
 

@@ -49,3 +49,27 @@
 
 }( document ) );
 
+
+( function ( win, $ ) {
+
+    'use strict';
+
+    var $header, $footer, $content;
+
+    function stickyFooter() {
+        var h = $header.outerHeight() + $footer.outerHeight() + 55;
+        $content.css( 'min-height', 'calc( 100vh - ' + h + 'px )' );
+    }
+
+    $( function () {
+
+        $header = $( '.tmpl__header' );
+        $content = $( '.tmpl__main' );
+        $footer = $( '.tmpl__footer' );
+
+        $( win ).on( 'resize', _.debounce( stickyFooter ) );
+        stickyFooter();
+
+    } );
+
+}( window, $svjq ) );

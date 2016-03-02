@@ -1,12 +1,15 @@
 
-//.tmpl {
-//    max-width: $site-width-rem;
-//    margin: 0 auto;
-//    padding: 0;
-//
-//    &__main {
-//        position: relative;
-//        z-index: 1;
-//    }
-//}
+.tmpl {
+
+
+    &__main {
+        position: relative;
+        z-index: 1;
+        max-width: $site-width-rem;
+        margin: 0 auto;
+        padding: 0;
+        min-height: 300px;
+        min-height: calc( 100vh - 266px);
+    }
+}
 

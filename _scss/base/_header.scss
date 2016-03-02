@@ -1,7 +1,7 @@
 
 .tmpl__header {
     max-width: $site-width-rem;
-    margin: 0 auto;
+    margin: 0 auto 3em;
 
     .sv-jcrmenu-portlet {
         position: absolute;
@@ -147,12 +147,17 @@
 .searchForm {
 
     &__input {
+        font: {
+            size: 14px;
+            weight: normal;
+        }
+        line-height: 14px;
+        height: 32px;
         background-color: $black;
         display: block;
         border: none;
         border-radius: .5em;
-        padding-left: .2em;
-        padding-right: .1em;
+        padding: 6px .2em 6px .2em;
         outline: none;
     }
 

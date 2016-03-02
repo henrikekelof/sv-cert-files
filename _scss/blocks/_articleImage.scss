@@ -1,0 +1,13 @@
+
+.articleImage {
+    max-width: 800px;
+    margin: 3em auto -1em;
+    text-align: center;
+
+    img {
+        display: inline-block;
+        max-height: 50vh;
+        width: auto;
+        height: auto;
+    }
+}
