@@ -2199,43 +2199,93 @@ var H = H || {},
 
 
 
-/*global $svjq */
+/*global $svjq, _h */
 
 ( function ( $ ) {
 
     'use strict';
 
-    var $form,
-        $hamburger,
-        $menu;
+    var hasLeftBox,
+        isOpen,
+        $searchBox,
+        $searchBoxInput,
+        $submitBtn;
 
-    function handleFocus() {
-        $form
-            .addClass( 'focused' )
-            .find( '.searchForm__input' )
-            .focus();
+    function open() {
+        isOpen = true;
+
+        $submitBtn
+            .css( {
+                transform: 'rotate( -90deg )'
+            } )
+            .addClass( 'is-open' );
+        $searchBox
+            .removeClass( 'hidden' )
+            .animate( {
+                width: 400
+            }, {
+                duration: 300,
+                complete: function () {
+                    if ( $searchBoxInput.val() === $searchBoxInput.attr( 'placeholder' ) ) {
+                        $searchBoxInput.val( '' );
+                    }
+                    $searchBoxInput.focus();
+                }
+            } );
     }
 
-    function handleBlur() {
-        $form
-            .removeClass( 'focused' );
+    function close() {
+        isOpen = false;
+        $submitBtn
+            .css( {
+                transform: 'rotate( 0deg )'
+            } )
+            .removeClass( 'is-open' );
+        $searchBox.animate( {
+            width: 32
+        }, {
+            duration: 300,
+            complete: function () {
+                $searchBox.addClass( 'hidden' );
+            }
+        } );
     }
 
-    function handleHamburger() {
-        $menu.toggleClass( 'visible' );
-        $hamburger.toggleClass( 'visible' );
+    function checkForBlur() {
+        hasLeftBox && close();
     }
 
     function init() {
-        $form = $( '.searchForm' );
-        $menu = $( '.tmpl__header ul' );
-        $hamburger = $( '.hamburger' );
-        $form
-            .on( 'mouseenter', handleFocus )
-            .find( '.searchForm__input' )
-                .on( 'focus', handleFocus )
-                .on( 'blur', handleBlur );
-        $hamburger.on( 'click', handleHamburger );
+
+        if ( _h.isEditMode ) {
+            return;
+        }
+
+        $searchBox = $( '.searchBox' );
+        $submitBtn = $searchBox.find( '.searchBox__submit' );
+        $searchBoxInput = $searchBox.find( '.searchBox__input' );
+
+        $searchBox
+            .find( '.searchBox__input, .searchBox__submit' )
+            .on( 'focus', function () {
+                hasLeftBox = false;
+                !isOpen && open();
+            } );
+
+        $searchBox
+            .find( '.searchBox__submit' )
+            .on( 'click', function () {
+                hasLeftBox = false;
+                open();
+            } );
+
+        $searchBox
+            .find( '.searchBox__input, .searchBox__submit' )
+            .on( 'blur', function () {
+                hasLeftBox = true;
+                setTimeout( checkForBlur, 100 );
+            } );
+
     }
 
     $( init );

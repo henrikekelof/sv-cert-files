@@ -2,6 +2,11 @@
 .tmpl__articlesList {
     @extend %group;
 
+    .sv-channel {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
     .sv-channel-item {
         padding: 20px;
 

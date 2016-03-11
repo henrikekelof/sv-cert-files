@@ -38,6 +38,7 @@
                 display: block;
                 padding: 10px $site-padding;
                 border-top: 1px solid #ccc;
+                background-color: rgba($white, .6);
             }
             @include media( $medium-and-up ) {
                 display: inline-block;
@@ -73,13 +74,11 @@
         }
     }
 
-    .searchForm {
-
+    .searchBox {
         position: absolute;
         z-index: 2;
-        top: 3px;
+        top: 5px;
         right: $site-padding;
-
     }
 
 }
@@ -145,53 +144,69 @@
 
 
 
-.searchForm {
+.searchBox {
+    height: 32px;
+    background-color:  $black;
+    border-radius: 4px;
 
+    &.hidden {
+        width: 32px;
+    }
+
+    &__submit,
     &__input {
-        font: {
-            size: 14px;
-            weight: normal;
-        }
-        line-height: 14px;
-        height: 32px;
-        background-color: $black;
-        display: block;
+        -webkit-appearance: none;
         border: none;
-        border-radius: .5em;
-        padding: 6px .2em 6px .2em;
-        outline: none;
-    }
 
-    &__label {
-        display: block;
-        background-color: $black;
-        padding: 2px 40px 2px 4px;
-        border-radius: .5em;
-        overflow: hidden;
-        width: 30px;
-        transition: width .25s ease;
-        .focused & {
-            width: 200px;
-
-            .searchForm__input {
-                background-color: $white;
-            }
+        .hidden & {
+            cursor: pointer;
         }
     }
 
-    button {
+    &__submit {
         position: absolute;
-        top: 6px;
-        right: 10px;
-        @include imageReplace(20px, 20px);
-        border: none;
+        top: 0;
+        right: 0;
+        width: 32px;
+        height: 32px;
         background: {
             color: $black;
             image: data-uri("search.svg");
             position: 50% 50%;
-            size: 16px auto;
             repeat: no-repeat;
-        };
+            size: 16px auto;
+        }
+        transition: transform .3s ease;
+        transform: rotate( 0deg );
+        border-radius: 4px;
+    }
+
+    &__input {
+        position: absolute;
+        top: 0;
+        right: 32px;
+        bottom: 0;
+        left: 0;
+        color: $black;
+        background-color: $white;
+        width: 100%;
+        width: calc( 100% - 32px );
+        height: 32px;
+        padding: 0 .5em;
+        border: 2px solid $black;
+        border-left-width: 4px;
+        border-radius: 4px;
+        font: {
+            family: $sans;
+            size: rem(16px, true);
+        }
+        outline: none;
+
+        @include placeholder {
+            font-style: italic;
+            color: #aaa;
+        }
+
     }
 
 }

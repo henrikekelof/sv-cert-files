@@ -1,5 +1,5 @@
 {
-    
+
     "bitwise": true,
     "camelcase": true,
     "curly": true,
@@ -20,11 +20,13 @@
     "trailing": true,
     "maxlen": false,
 
+    "expr": true,
+
     "browser" : true,
 
     "onevar": true,
     "white": true,
 
     "validthis": true
-    
+
 }
