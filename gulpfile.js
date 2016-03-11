@@ -6,24 +6,25 @@
 
     var dir,
         files,
-        path            = require( 'path' ),
-        gulp            = require( 'gulp' ),
-        rename          = require( 'gulp-rename' ),
-        concat          = require( 'gulp-concat' ),
-        connect         = require( 'gulp-connect' ),
-        sass            = require( 'gulp-sass' ),
-        sassInlineImage = require( 'sass-inline-image' ),
-        lodashBuilder   = require( 'gulp-lodash-builder' ),
-        jshint          = require( 'gulp-jshint' ),
-        jscs            = require( 'gulp-jscs' ),
-        uglify          = require( 'gulp-uglify' ),
-        cssnano         = require( 'gulp-cssnano' );
+        path          = require( 'path' ),
+        gulp          = require( 'gulp' ),
+        rename        = require( 'gulp-rename' ),
+        concat        = require( 'gulp-concat' ),
+        connect       = require( 'gulp-connect' ),
+        sass          = require( 'gulp-sass' ),
+        inlineBase64  = require( 'gulp-inline-base64' ),
+        lodashBuilder = require( 'gulp-lodash-builder' ),
+        jshint        = require( 'gulp-jshint' ),
+        jscs          = require( 'gulp-jscs' ),
+        uglify        = require( 'gulp-uglify' ),
+        autoprefixer  = require( 'gulp-autoprefixer' ),
+        cssnano       = require( 'gulp-cssnano' );
 
     dir = {
 
         dist    : 'dist',
         scss    : '_scss',
-        assets  : '_assets',
+        assets  : '_assets/', // Must use ending slash
         hintedjs: '_js/site',
         sitejs  : [
             '_js/site/pre.js',
@@ -43,8 +44,8 @@
         scss   : 'site.scss',
         scssmin: 'site.min.scss',
 
-        css        : 'site.css',
-        cssmin     : 'site.min.css',
+        css   : 'site.css',
+        cssmin: 'site.min.css',
 
         sitejs: 'ours.js',
         libjs : 'theirs.js',
@@ -58,9 +59,17 @@
     function buildCss( inputStream ) {
         return inputStream
             .pipe( sass( {
-                outputStyle: 'nested',
-                functions  : sassInlineImage()
-            } ).on( 'error', sass.logError ) );
+                outputStyle: 'nested'
+            } ).on( 'error', sass.logError ) )
+            .pipe( inlineBase64( {
+                baseDir: dir.assets,
+                maxSize: 1,
+                debug: true
+            } ) )
+            .pipe( autoprefixer( {
+                browsers: [ 'last 2 versions' ],
+                cascade : false
+            } ) );;
     }
 
     gulp.task( 'css', function () {

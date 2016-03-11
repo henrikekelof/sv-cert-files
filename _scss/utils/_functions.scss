@@ -43,6 +43,5 @@
 }
 
 @function data-uri( $file ) {
-
-    @return url( inline-image( $ASSETS + $file ) );
+    @return unquote("url('" + $file + "', true)"); // Force Base 64!
 }
