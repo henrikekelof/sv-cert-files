@@ -210,3 +210,19 @@
     }
 
 }
+
+.sv-standardsearch-portlet input[type=submit]{
+    -webkit-appearance: none;
+    border: none;
+    height: 34px;
+    padding: 0 1em;
+    color: $white;
+    background: {
+        color: $black;
+        position: 50% 50%;
+        repeat: no-repeat;
+        size: 16px auto;
+    }
+    font-family: $sans;
+    border-radius: 4px;
+}

@@ -252,6 +252,19 @@ a.sv-font-meta:link, a.sv-font-meta:hover, a.sv-font-meta:focus, a.sv-font-meta:
       font-style: italic;
       color: #aaa; }
 
+.sv-standardsearch-portlet input[type=submit] {
+  -webkit-appearance: none;
+  border: none;
+  height: 34px;
+  padding: 0 1em;
+  color: #fff;
+  background-color: #000;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 16px auto;
+  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 4px; }
+
 .tmpl__topArticle {
   text-align: center;
   border-bottom: 1px solid #ccc;
