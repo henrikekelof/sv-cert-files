@@ -76,6 +76,7 @@
     .searchForm {
 
         position: absolute;
+        z-index: 2;
         top: 3px;
         right: $site-padding;
 

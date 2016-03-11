@@ -133,6 +133,7 @@ a.sv-font-meta:link, a.sv-font-meta:hover, a.sv-font-meta:focus, a.sv-font-meta:
           background-color: #ba3925; } }
   .tmpl__header .searchForm {
     position: absolute;
+    z-index: 2;
     top: 3px;
     right: 15px; }
 
