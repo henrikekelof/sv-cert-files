@@ -18,7 +18,8 @@
         jscs          = require( 'gulp-jscs' ),
         uglify        = require( 'gulp-uglify' ),
         autoprefixer  = require( 'gulp-autoprefixer' ),
-        cssnano       = require( 'gulp-cssnano' );
+        cssnano       = require( 'gulp-cssnano' ),
+        minifyInline  = require( 'gulp-minify-inline' );
 
     dir = {
 
@@ -33,6 +34,7 @@
         ],
         lodash  : '_build/lodash.custom.js',
         libjs   : [
+            '_js/lib/polyfills.js',
             '_js/lib/jquery-plugins.custom.js',
             '_js/lib/fastclick.js'
         ]
@@ -64,12 +66,13 @@
             .pipe( inlineBase64( {
                 baseDir: dir.assets,
                 maxSize: 1,
-                debug: true
+                debug  : true
             } ) )
             .pipe( autoprefixer( {
                 browsers: [ 'last 2 versions' ],
                 cascade : false
-            } ) );;
+            } ) );
+
     }
 
     gulp.task( 'css', function () {
@@ -84,32 +87,41 @@
     } );
 
 
+    //----- Minifying Velocity HEAD -----//
+
+    gulp.task( 'minify-head', function () {
+        gulp.src( '_resources/tillagg-i-HEAD.vm' )
+            .pipe( minifyInline() )
+            .pipe( gulp.dest( '_build/' ) );
+    } );
+
+
     //----- Building JS -----//
 
     gulp.task( 'jshint', function () {
         return gulp.src( path.join( dir.hintedjs, '/**/*.js' ) )
-            .pipe( jshint( '.jshintrc' ) )
-            .pipe( jshint.reporter( 'jshint-stylish' ) )
-            .pipe( jshint.reporter( 'fail' ) );
+                   .pipe( jshint( '.jshintrc' ) )
+                   .pipe( jshint.reporter( 'jshint-stylish' ) )
+                   .pipe( jshint.reporter( 'fail' ) );
     } );
 
     gulp.task( 'jscs', function () {
         return gulp.src( path.join( dir.hintedjs, '/**/*.js' ) )
-            .pipe( jscs() )
-            .pipe( jscs.reporter() );
+                   .pipe( jscs() )
+                   .pipe( jscs.reporter() );
     } );
 
     gulp.task( 'lodash', function () {
         return gulp.src( dir.sitejs, {
-                buffer: false
-            } )
-            .pipe( lodashBuilder( {
-                target  : dir.lodash,
-                settings: {}
-            } ) )
-            .on( 'error', function ( err ) {
-                console.log( 'err: ', err )
-            } );
+                       buffer: false
+                   } )
+                   .pipe( lodashBuilder( {
+                       target  : dir.lodash,
+                       settings: {}
+                   } ) )
+                   .on( 'error', function ( err ) {
+                       console.log( 'err: ', err )
+                   } );
     } );
 
     gulp.task( 'libjs', [ 'lodash' ], function () {
@@ -117,41 +129,41 @@
         var libjs = dir.libjs;
         libjs.unshift( dir.lodash );
         return gulp.src( libjs )
-            .pipe( concat( files.libjs ) )
-            .pipe( gulp.dest( dir.dist ) );
+                   .pipe( concat( files.libjs ) )
+                   .pipe( gulp.dest( dir.dist ) );
     } );
 
     gulp.task( 'sitejs', function () {
         return gulp.src( dir.sitejs )
-            .pipe( concat( files.sitejs ) )
-            .pipe( gulp.dest( dir.dist ) );
+                   .pipe( concat( files.sitejs ) )
+                   .pipe( gulp.dest( dir.dist ) );
     } );
 
     gulp.task( 'js', [ 'sitejs', 'libjs' ], function () {
         return gulp.src( [
-                _dist( files.libjs ),
-                _dist( files.sitejs )
-            ] )
-            .pipe( concat( files.js ) )
-            .pipe( gulp.dest( dir.dist ) );
+                       _dist( files.libjs ),
+                       _dist( files.sitejs )
+                   ] )
+                   .pipe( concat( files.js ) )
+                   .pipe( gulp.dest( dir.dist ) );
     } );
 
     gulp.task( 'jsfast', [ 'sitejs' ], function () {
         return gulp.src( [
-                _dist( files.libjs ),
-                _dist( files.sitejs )
-            ] )
-            .pipe( concat( files.js ) )
-            .pipe( gulp.dest( dir.dist ) );
+                       _dist( files.libjs ),
+                       _dist( files.sitejs )
+                   ] )
+                   .pipe( concat( files.js ) )
+                   .pipe( gulp.dest( dir.dist ) );
     } );
 
     gulp.task( 'jsmin', [ 'jshint', 'jscs', 'js' ], function () {
         return gulp.src( [
-                _dist( files.js )
-            ] )
-            .pipe( rename( files.jsmin ) )
-            .pipe( uglify() )
-            .pipe( gulp.dest( dir.dist ) );
+                       _dist( files.js )
+                   ] )
+                   .pipe( rename( files.jsmin ) )
+                   .pipe( uglify() )
+                   .pipe( gulp.dest( dir.dist ) );
 
     } );
 
@@ -173,7 +185,7 @@
 
     //----- Build for prod -----//
 
-    gulp.task( 'stage', [ 'jsmin', 'cssmin' ] );
+    gulp.task( 'stage', [ 'jsmin', 'cssmin', 'minify-head' ] );
 
 
     gulp.task( 'default', [ 'stage' ] );

@@ -1,4 +1,4 @@
-/*global $svjq, _h */
+/*global jQuery, _b */
 
 ( function ( $ ) {
 
@@ -56,7 +56,7 @@
 
     function init() {
 
-        if ( _h.isEditMode ) {
+        if ( _b.isEditMode ) {
             return;
         }
 
@@ -89,4 +89,4 @@
 
     $( init );
 
-}( $svjq ) );
+}( jQuery ) );

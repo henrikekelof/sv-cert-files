@@ -1,9 +1,9 @@
-/*global $svjq, _, FastClick, _h */
+/*global jQuery, _, FastClick, _b */
 
 
 // ==|== FastClick ================================================================================ //
 
-( function ( d ) {
+( function ( d, $ ) {
 
     'use strict';
 
@@ -12,7 +12,7 @@
         return;
     }
 
-    _h.attachFastClick = function ( elms ) {
+    _b.attachFastClick = function ( elms ) {
 
         var i, j;
 
@@ -41,13 +41,13 @@
 
     };
 
-    _h.init( function () {
-        _h.attachFastClick( [
+    $( function () {
+        _b.attachFastClick( [
             d.querySelector( '.hamburger' )
         ] );
     } );
 
-}( document ) );
+}( document, jQuery ) );
 
 
 ( function ( win, $ ) {
@@ -72,4 +72,4 @@
 
     } );
 
-}( window, $svjq ) );
+}( window, jQuery ) );

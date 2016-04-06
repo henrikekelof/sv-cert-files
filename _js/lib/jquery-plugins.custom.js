@@ -1,4 +1,4 @@
-/*global $svjq */
+/*global jQuery */
 
 ( function ( $ ) {
 
@@ -17,4 +17,4 @@
         };
     }
 
-}( $svjq ) );
+}( jQuery ) );

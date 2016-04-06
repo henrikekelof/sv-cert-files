@@ -30,6 +30,7 @@
     "gulp-jscs": "^3.0.2",
     "gulp-jshint": "^2.0.0",
     "gulp-lodash-builder": "^1.0.0",
+    "gulp-minify-inline": "^0.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.2.0",
     "gulp-uglify": "^1.5.1",

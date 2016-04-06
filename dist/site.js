@@ -1,7 +1,7 @@
 /**
  * @license
  * lodash 3.10.1 (Custom Build) <https://lodash.com/>
- * Build: `lodash -d -c include="isString, isObject, isArray, each, debounce" settings="{}"`
+ * Build: `lodash -d -c include="isObject, each, debounce" settings="{}"`
  * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
  * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -1203,7 +1203,77 @@
   }
 }.call(this));
 
-/*global $svjq */
+( function ( strPrototype, arrPrototype ) {
+
+    'use strict';
+
+
+    if ( !strPrototype.startsWith ) {
+        strPrototype.startsWith = function ( str ) {
+            return this.slice( 0, str.length ) === str;
+        };
+    }
+
+    if ( !strPrototype.endsWith ) {
+        strPrototype.endsWith = function ( str ) {
+            return this.slice( -str.length ) === str;
+        };
+    }
+
+    if ( !strPrototype.includes ) {
+        strPrototype.includes = function ( search, start ) {
+            if ( typeof start !== 'number' ) {
+                start = 0;
+            }
+            if ( start + search.length > this.length ) {
+                return false;
+            } else {
+                return this.indexOf( search, start ) !== -1;
+            }
+        };
+    }
+
+    if ( !strPrototype.capitalize ) {
+        strPrototype.capitalize = function () {
+            return this.charAt( 0 ).toUpperCase() + this.slice( 1 );
+        };
+    }
+
+    if ( !arrPrototype.includes ) {
+        arrPrototype.includes = function ( searchElement /*, fromIndex*/ ) {
+
+            var Obj   = Object( this ),
+                len = parseInt( Obj.length ) || 0,
+                n = parseInt( arguments[ 1 ], 10 ) || 0,
+                k, currentElement;
+
+            if ( len === 0 ) {
+                return false;
+            }
+
+            if ( n >= 0 ) {
+                k = n;
+            } else {
+                k = len + n;
+                if ( k < 0 ) { k = 0; }
+            }
+
+            while ( k < len ) {
+                currentElement = Obj[ k ];
+                if ( searchElement === currentElement ||
+                     ( searchElement !== searchElement && currentElement !== currentElement ) ) {
+                    return true;
+                }
+                k += 1;
+            }
+
+            return false;
+            
+        };
+    }
+
+}( String.prototype, Array.prototype ) );
+/*global jQuery */
 
 ( function ( $ ) {
 
@@ -1222,7 +1292,7 @@
         };
     }
 
-}( $svjq ) );
+}( jQuery ) );
 
 ;(function () {
 	'use strict';
@@ -2066,140 +2136,167 @@
 	}
 }());
 
-/*global _ */
+/*global jQuery */
 
-// ==|== Global Namespace Variables =============================================================== //
+// ==|== Global Namespace Variables ==============================================================//
 
 /**
  * Site script global namespace. Page or component specific code
  * should be placed under this namespace.
  */
-var H = H || {},
+var BV = BV || {},
     /**
      * Toolbox Library
      */
-    _h = _h || {};
+    _b = _b || {};
 
 
-// ==|== Add to init and exec on DOMContentLoaded ================================================= //
 
-( function ( win, doc, undefined ) {
+// ==|== Misc Toolbox Functions ================================================================= //
+
+( function () {
 
     'use strict';
 
-    var functions       = [],
-        functionsCalled = [],
-        currentFunction,
-        isInitiated     = false;
+    [ 'Arguments', 'Array', 'Function', 'String', 'Number', 'Date', 'RegExp' ]
+        .forEach( function ( name ) {
+            _b[ 'is' + name ] = function ( obj ) {
+                return Object.prototype.toString.call( obj ) === '[object ' + name + ']';
+            };
+        } );
 
-    function include( fn ) {
-        functions.push( fn );
+    // Test for integer
+    _b.isInt = function ( n ) {
+        return Number( n ) === n && n % 1 === 0;
+    };
+
+    // Test for float
+    _b.isFloat = function ( n ) {
+        return n === Number( n ) && n % 1 !== 0;
+    };
+
+    function isObject( o ) {
+        return o !== null && typeof o === 'object' && !Array.isArray( o );
     }
 
+    function isObjectObject( o ) {
+        return isObject( o ) === true && Object.prototype.toString.call( o ) === '[object Object]';
+    }
+
+    _b.isPlainObject = function ( o ) {
+
+        var ctor, prot;
+
+        if ( isObjectObject( o ) === false ) {
+            return false;
+        }
+
+        // If has modified constructor
+        ctor = o.constructor;
+        if ( typeof ctor !== 'function' ) {
+            return false;
+        }
+
+        // If has modified prototype
+        prot = ctor.prototype;
+        if ( isObjectObject( prot ) === false ) {
+            return false;
+        }
+
+        // If constructor does not have an Object-specific method
+        if ( prot.hasOwnProperty( 'isPrototypeOf' ) === false ) {
+            return false;
+        }
+
+        // Most likely a plain Object
+        return true;
+    };
+
+}() );
+
+// ==|== Exec _h.init on DOMContentLoaded ======================================================= //
+
+/**
+ * Add functions or function names for functions to be executed on DOMContentLoaded.
+ * Use inline in markup. Modules will tell the script which functions
+ * need to be executed for the current page.
+ * Pass as string to ensure function to only be executed once.
+ *
+ * <script> _b.init.push( 'M.fooBar' ) </script>
+ * // => will execute M.foobar on DOMContentLoaded
+ *
+ * <script> _b.init.push( function () { alert( 'Hello' ) } ) </script>
+ * // => will alert 'Hello' on DOMContentLoaded
+ */
+
+
+( function ( win, doc, $, undefined ) {
+
+    'use strict';
+
+    var functionsCalled = [];
 
     function getFunction( fn ) {
 
-        if ( typeof fn === 'function' ) {
-            return fn;
-        }
-
         var parts = fn.split( '.' ),
-            i,
-            l;
+            currentFunction = window,
+            i, l;
 
         for ( i = 0, l = parts.length; i < l; i += 1 ) {
-
             if ( !currentFunction[ parts[ i ] ] ) {
                 return undefined;
             } else {
                 currentFunction = currentFunction[ parts[ i ] ];
             }
         }
-        return currentFunction;
-    }
 
-
-    function exec( fns ) {
-
-        var fn, i, l;
-
-        fns = fns || functions;
-
-        for ( i = 0, l = fns.length; i < l; i += 1 ) {
-
-            currentFunction = win;
-
-            if ( _.isString( fns[ i ] ) && functionsCalled.indexOf( fns[ i ] ) === -1 ) {
-
-                functionsCalled.push( fns[ i ] );
-                fn = getFunction( fns[ i ] );
-
-                if ( typeof fn === 'function' ) {
-                    fn();
-                }
-
-            }
+        if ( _b.isFunction( currentFunction ) ) {
+            return currentFunction;
         }
 
     }
 
 
-    /**
-     * Add function names for functions to be executed on DOMContentLoaded.
-     * Use inline in markup. Modules will tell the script which functions
-     * need to be executed for the current page.
-     * Any named function may be added multiple times but will only
-     * be executed once
-     *
-     * <script> _h.init( 'M.fooBar' ) </script>
-     * // => will execute M.foobar on DOMContentLoaded
-     *
-     * <script> _h.init( function () { alert( 'Hello' ) } ) </script>
-     * // => will alert 'Hello' on DOMContentLoaded
-     */
-    _h.init = function ( fn ) {
+    function exec( f ) {
 
-        if ( isInitiated ) {
-            if ( _.isString( fn ) ) {
-                fn = [ fn ];
-            }
-            exec( fn );
+        if ( _b.isArray( f ) ) {
+            f.forEach( exec );
             return;
         }
 
-        if ( !fn || ( _.isObject( fn ) && fn.target ) ) {
-            if ( functions.length > 0 ) {
-                exec();
+        if ( _b.isString( f ) ) {
+            if ( functionsCalled.includes( f ) ) {
+                return;
             }
-            isInitiated = true;
-            return;
+            functionsCalled.push( f );
+            f = getFunction( f );
         }
 
-        if ( _.isString( fn ) || typeof ( fn ) === 'function' ) {
-            include( fn );
-        } else if ( _.isArray( fn ) ) {
-            fn.forEach( function ( f ) {
-                include( f );
-            } );
+        if ( _b.isFunction( f ) ) {
+            f();
         }
 
-    };
-
-    //    _h.inInit = function ( s ) {
-    //        return ( functions.indexOf( s ) > -1 || functionsCalled.indexOf( s ) > -1 );
-    //    };
-
-    doc.addEventListener( 'DOMContentLoaded', _h.init );
-
-}( window, document ) );
+    }
 
 
+    $( function () {
+        if ( _b.init.length > 0 ) {
+            _b.init.forEach( exec );
+        }
+    } );
 
+}( window, document, jQuery ) );
 
 
 
 
-/*global $svjq, _h */
+
+
+
+
+
+
+/*global jQuery, _b */
 
 ( function ( $ ) {
 
@@ -2257,7 +2354,7 @@ var H = H || {},
 
     function init() {
 
-        if ( _h.isEditMode ) {
+        if ( _b.isEditMode ) {
             return;
         }
 
@@ -2290,13 +2387,13 @@ var H = H || {},
 
     $( init );
 
-}( $svjq ) );
-/*global $svjq, _, FastClick, _h */
+}( jQuery ) );
+/*global jQuery, _, FastClick, _b */
 
 
 // ==|== FastClick ================================================================================ //
 
-( function ( d ) {
+( function ( d, $ ) {
 
     'use strict';
 
@@ -2305,7 +2402,7 @@ var H = H || {},
         return;
     }
 
-    _h.attachFastClick = function ( elms ) {
+    _b.attachFastClick = function ( elms ) {
 
         var i, j;
 
@@ -2334,13 +2431,13 @@ var H = H || {},
 
     };
 
-    _h.init( function () {
-        _h.attachFastClick( [
+    $( function () {
+        _b.attachFastClick( [
             d.querySelector( '.hamburger' )
         ] );
     } );
 
-}( document ) );
+}( document, jQuery ) );
 
 
 ( function ( win, $ ) {
@@ -2365,4 +2462,4 @@ var H = H || {},
 
     } );
 
-}( window, $svjq ) );
+}( window, jQuery ) );
