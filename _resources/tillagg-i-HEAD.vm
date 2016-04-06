@@ -21,7 +21,7 @@
     #set ($assetCssMain = "http://local.dev:8080/site.css")
     #set ($assetJsMain = "http://local.dev:8080/site.js")
 
-    <script> console.log('Using local assets'); </script>
+    <script id="js-debug"> console.log('Using local assets'); </script>
 
 #else
     
