@@ -4,11 +4,18 @@
 
     'use strict';
 
+    //----- Helpers -----//
+
+    function _dist( file ) {
+        return path.join( dir.dist, file );
+    }
+
     var dir,
         files,
         path          = require( 'path' ),
         gulp          = require( 'gulp' ),
         rename        = require( 'gulp-rename' ),
+        insert        = require( 'gulp-insert' ),
         concat        = require( 'gulp-concat' ),
         connect       = require( 'gulp-connect' ),
         sass          = require( 'gulp-sass' ),
@@ -77,7 +84,8 @@
 
     gulp.task( 'css', function () {
         return buildCss( gulp.src( path.join( dir.scss, files.scss ) ) )
-            .pipe( gulp.dest( dir.dist ) );
+            .pipe( gulp.dest( dir.dist ) )
+            .pipe( connect.reload() );
     } );
 
     gulp.task( 'cssmin', function () {
@@ -148,14 +156,21 @@
                    .pipe( gulp.dest( dir.dist ) );
     } );
 
-    gulp.task( 'jsfast', [ 'sitejs' ], function () {
+    function jsfast() {
         return gulp.src( [
                        _dist( files.libjs ),
                        _dist( files.sitejs )
                    ] )
                    .pipe( concat( files.js ) )
-                   .pipe( gulp.dest( dir.dist ) );
-    } );
+                   .pipe( insert.append(
+                       ';(function(){_b.load.js("' +
+                       'http://localhost:8088/livereload.js?snipver=1' +
+                       '");}());' ) )
+                   .pipe( gulp.dest( dir.dist ) )
+                   .pipe( connect.reload() );
+    }
+
+    gulp.task( 'jsfast', [ 'sitejs' ], jsfast );
 
     gulp.task( 'jsmin', [ 'jshint', 'jscs', 'js' ], function () {
         return gulp.src( [
@@ -172,12 +187,20 @@
     gulp.task( 'connect', function () {
         connect.server( {
             root      : dir.dist,
-            livereload: false
+            livereload: {
+                enable: true,
+                port  : 8088
+            },
+            host      : 'localhost',
+            port      : 8080
         } );
     } );
 
     gulp.task( 'watch', [ 'css', 'js', 'connect' ], function () {
-        gulp.watch( path.join( dir.hintedjs, '/**/*.js' ), [ 'jsfast' ] );
+        jsfast();
+        gulp.watch( [
+            path.join( dir.hintedjs, '/**/*.js' )
+        ], [ 'jsfast' ] );
         gulp.watch( dir.libjs, [ 'js' ] );
         gulp.watch( path.join( dir.scss, '/**/*.scss' ), [ 'css' ] );
     } );
@@ -191,11 +214,6 @@
     gulp.task( 'default', [ 'stage' ] );
 
 
-    //----- Helpers -----//
-
-    function _dist( file ) {
-        return path.join( dir.dist, file );
-    }
 
 }() );
 
