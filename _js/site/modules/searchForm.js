@@ -8,7 +8,9 @@
         isOpen,
         $searchBox,
         $searchBoxInput,
-        $submitBtn;
+        $submitBtn,
+        $hamburger,
+        $menu;
 
     function open() {
         isOpen = true;
@@ -54,6 +56,11 @@
         hasLeftBox && close();
     }
 
+    function toggleMenu() {
+        $menu.toggleClass( 'visible' );
+        $hamburger.toggleClass( 'visible' );
+    }
+
     function init() {
 
         if ( _b.isEditMode ) {
@@ -84,6 +91,11 @@
                 hasLeftBox = true;
                 setTimeout( checkForBlur, 100 );
             } );
+
+        $menu = $( '.tmpl__header ul' );
+        $hamburger = $( '.hamburger' );
+
+        $hamburger.on( 'click', toggleMenu );
 
     }
 

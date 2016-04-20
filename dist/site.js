@@ -2306,7 +2306,9 @@ var BV = BV || {},
         isOpen,
         $searchBox,
         $searchBoxInput,
-        $submitBtn;
+        $submitBtn,
+        $hamburger,
+        $menu;
 
     function open() {
         isOpen = true;
@@ -2352,6 +2354,11 @@ var BV = BV || {},
         hasLeftBox && close();
     }
 
+    function toggleMenu() {
+        $menu.toggleClass( 'visible' );
+        $hamburger.toggleClass( 'visible' );
+    }
+
     function init() {
 
         if ( _b.isEditMode ) {
@@ -2382,6 +2389,11 @@ var BV = BV || {},
                 hasLeftBox = true;
                 setTimeout( checkForBlur, 100 );
             } );
+
+        $menu = $( '.tmpl__header ul' );
+        $hamburger = $( '.hamburger' );
+
+        $hamburger.on( 'click', toggleMenu );
 
     }
 
